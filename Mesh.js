@@ -23,14 +23,14 @@
     Mesh.prototype.decodePly = function(text)
     {
     var textByLine=text.split("\n");
+    //window.alert("\"" + textByLine[0].trim() + "\"");
     var facesCount;
     var verticesCount;
-    ReturnMesh = new Mesh();
-    if (textByLine[0].toLowerCase()=="ply")
+    if (textByLine[0].trim().toLowerCase()=="ply")
     {
         //window.alert("appears to be a complete ply file");
         var i=0;
-        while(textByLine[i] != "end_header")
+        while(textByLine[i].trim().toLowerCase() != "end_header")
         {
             var line = textByLine[i].split(" ");
             if (line[0].toLowerCase() == "element")
@@ -44,19 +44,20 @@
                     facesCount = parseInt(line[2]);
                 }
             }
+            i++;
         }
         
         i++
         var j =i;
-        for(;i<verticesCount+j;j++)
+        for(;i<verticesCount+j;i++)
         {
             var line = textByLine[i].split(" ");
-            ReturnMesh.vertices.push( vec3(
+            this.vertices.push( vec3(
                 parseFloat( line[0] ),
                 parseFloat( line[1] ),
                 parseFloat( line[2] )
             ));
-            ReturnMesh.normals.push( vec3(
+            this.normals.push( vec3(
                 parseFloat( line[3] ),
                 parseFloat( line[4] ),
                 parseFloat( line[5] )
@@ -67,7 +68,7 @@
         for(;i < facesCount+pos;i++)
         {
             var line = textByLine[i].split(" ");
-            ReturnMesh.faces.push( vec3(
+            this.faces.push( vec3(
                 parseInt(line[1]),
                 parseInt(line[2]),
                 parseInt(line[3])
@@ -82,12 +83,12 @@
         for(;j<verticesCount+2;j++)
         {
             var line = textByLine[j].split(" ");
-            ReturnMesh.vertices.push( vec3(
+            this.vertices.push( vec3(
                 parseFloat( line[0] ),
                 parseFloat( line[1] ),
                 parseFloat( line[2] )
             ));
-            ReturnMesh.normals.push( vec3(
+            this.normals.push( vec3(
                 parseFloat( line[3] ),
                 parseFloat( line[4] ),
                 parseFloat( line[5] )
@@ -98,7 +99,7 @@
         for(;j < facesCount+pos;j++)
         {
             var line = textByLine[j].split(" ");
-            ReturnMesh.faces.push( vec3(
+            this.faces.push( vec3(
                 parseInt(line[1]),
                 parseInt(line[2]),
                 parseInt(line[3])
@@ -106,5 +107,4 @@
         }
     }
     
-    return ReturnMesh;
 }
