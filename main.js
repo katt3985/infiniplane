@@ -71,6 +71,14 @@ function setupAttributes()
 
 function render()
 {
+	pointBuff = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, pointBuff);
+	gl.bufferData(gl.ARRAY_BUFFER, flatten(pointList), gl.STATIC_DRAW);
+	
+	normBuff = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, normBuff);
+	gl.bufferData(gl.ARRAY_BUFFER, flatten(nrmList), gl.STATIC_DRAW);
+
     //request refreshed frame for animation
     requestAnimFrame(render);
 
