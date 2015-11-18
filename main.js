@@ -44,6 +44,31 @@ window.onload = function init ()
     
 }
 
+function setupAttributes()
+{
+    //if there are points in the point list...
+    if (pointList.length>0)
+	{
+	    //activates pointBuff buffer
+	    gl.bindBuffer(gl.ARRAY_BUFFER, pointBuff);    
+	    //associates vPosition atribute with the current buffer
+	    var vPosition = gl.getAttribLocation(program, "vPosition");
+	    gl.vertexAttribPointer(vPosition, 3, gl.FLOAT, false, 0, 0);
+	    gl.enableVertexAttribArray(vPosition);
+	}
+
+    //if there are normals in the normal list...
+    if (nrmList.length>0)
+	{
+	    //activates normBuff buffer
+	    gl.bindBuffer(gl.ARRAY_BUFFER, normBuff);
+	    //associates vPosition atribute with the current buffer
+	    var vNormal = gl.getAttribLocation(program, "vNormal");
+	    gl.vertexAttribPointer(vNormal, 3, gl.FLOAT, false, 0, 0);
+	    gl.enableVertexAttribArray(vNormal);
+	}
+}
+
 function render()
 {
     //request refreshed frame for animation
