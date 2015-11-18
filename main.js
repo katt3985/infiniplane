@@ -1,6 +1,8 @@
 var gl;
 var program;
 var PlayerMesh;
+var pointBuff;
+var normBuff;
 
 window.onload = function init () 
 {
@@ -36,18 +38,26 @@ window.onload = function init ()
             //window.alert(text);
             PlayerMesh.decodePly(text);
             //window.alert("Mesh has "+ PlayerMesh.vertices.length + " vertices" );
+            
+            pointBuff = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, pointBuff);
+            gl.bufferData(gl.ARRAY_BUFFER, flatten(PlayerMesh.vertices), gl.STATIC_DRAW);
+	
+            normBuff = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, normBuff);
+            gl.bufferData(gl.ARRAY_BUFFER, flatten(PlayerMesh.normals), gl.STATIC_DRAW);
         }
     };
     xhttp.open("GET", "airplane.ply", true);
     xhttp.send();
     
-    
+    render();
 }
 
 function setupAttributes()
 {
     //if there are points in the point list...
-    if (pointList.length>0)
+    if (PlayerMesh.vertices.length>0)
 	{
 	    //activates pointBuff buffer
 	    gl.bindBuffer(gl.ARRAY_BUFFER, pointBuff);    
@@ -58,7 +68,7 @@ function setupAttributes()
 	}
 
     //if there are normals in the normal list...
-    if (nrmList.length>0)
+    if (0) //PlayerMesh.normals.length>0)
 	{
 	    //activates normBuff buffer
 	    gl.bindBuffer(gl.ARRAY_BUFFER, normBuff);
@@ -71,13 +81,7 @@ function setupAttributes()
 
 function render()
 {
-	pointBuff = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, pointBuff);
-	gl.bufferData(gl.ARRAY_BUFFER, flatten(pointList), gl.STATIC_DRAW);
-	
-	normBuff = gl.createBuffer();
-	gl.bindBuffer(gl.ARRAY_BUFFER, normBuff);
-	gl.bufferData(gl.ARRAY_BUFFER, flatten(nrmList), gl.STATIC_DRAW);
+
 
     //request refreshed frame for animation
     requestAnimFrame(render);
@@ -127,15 +131,15 @@ function render()
     setupAttributes()
 
     //Sends color to the GPU as a uniform
-    gl.uniform4fv(colorLoc, flatten( vec4(0.0, 0.0, 0.0, 1.0) ));
+    gl.uniform4fv(colorLoc, flatten( vec4(1.0, 1.0, 1.0, 1.0) ));
     gl.bindBuffer(gl.ARRAY_BUFFER, pointBuff);
     //draws point list array as Triangles
-    gl.drawArrays(gl.TRIANGLES, 0, pointList.length);
+    gl.drawArrays(gl.TRIANGLES, 0, PlayerMesh.vertices.length);
 
     //Sends new color to the GPU
-    gl.uniform4fv(colorLoc, flatten( vec4(1.0, 1.0, 1.0, 1.0)));
+    gl.uniform4fv(colorLoc, flatten( vec4(0.0, 1.0, 0.0,1.0)));
     //draws point list array as Lines
-    for(var i = 0; i < pointList.length; i+=3)
+    for(var i = 0; i < PlayerMesh.vertices.length; i+=3)
     {
     	gl.drawArrays(gl.LINE_LOOP, i, 3);
     }

@@ -5,15 +5,21 @@
         //This is a vertex shader, we'll discuss this later in the semester
         //Derived from code for Interactive Computer Graphics 7th Ed.
 
-        attribute vec4 vColor;
+        //attribute vec4 vColor;
         attribute vec4 vPosition;
+        attribute vec4 vNormal;
+        
+        uniform mat4 vRotMat;
+        uniform mat4 vProjMat;
+        uniform vec4 vColor;
 
         varying vec4 col;
 
         void main()
         {
-            gl_PointSize = 1.0;
-            gl_Position = vPosition;
+            //gl_PointSize = 1.0;
+            vec4 tNormal=vNormal;
+            gl_Position = vPosition*vRotMat*vProjMat;
             col = vColor;
         }
         </script>
