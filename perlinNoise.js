@@ -1,19 +1,21 @@
 /*Simple Perlin Noise implementation*/
 
-var x = 0.1;
-for (var width = 0; width < canvas.width; width++) //This is how many pixels wide it is (x in 2D)
+function perlinNoise()
 {
-    var y = 0.0;
-    for (var height = 0; height < canvas.height; height++) //This is how many pixels high it is (y in 2D)
-    {
-        var bright = map(noise(x, y), 0, 1, 0, 255);
-        stroke(bright, bright, bright);
-        point(width, height);
-        y += 0.01;
-    }
-    x += 0.01;
+	var x = 0.1;
+	for (var width = 0; width < canvas.width; width++) //This is how many pixels wide it is (x in 2D)
+	{
+    	var y = 0.0;
+   		for (var height = 0; height < canvas.height; height++) //This is how many pixels high it is (y in 2D)
+    	{
+        	var bright = map(noise(x, y), 0, 1, 0, 255);
+    	    stroke(bright, bright, bright);	
+	        point(width, height);
+        	y += 0.01;
+    	}
+    	x += 0.01;
+	}
 }
-
 
 
 
