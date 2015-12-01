@@ -228,27 +228,3 @@ function average(var x, var y, var z)
 {
 	return (x + y + z) / 3.0;
 }
-
-
-function doMoreMidPoints(var a, var b, var c, var d)
-{
-	midPoint = (a + b + c + d) / 4.0;
-	midPointNum[midPointCount] = midPoint;
-	midPointCount++;
-	pointList.push(midPoint);
-	
-	midPoint = (a + c + square[squareCount - 3] + diamond[diamondCount - 3]) / 4.0;
-	midPointNum[midPointCount] = midPoint;
-	midPointCount++;
-	pointList.push(midPoint);
-	
-	midPoint = (a + d + square[squareCount - 2] + diamond[diamondCount - 1]) / 4.0;
-	midPointNum[midPointCount] = midPoint;
-	midPointCount++;
-	pointList.push(midPoint);
-	
-	midPoint = (a + diamond[diamondCount - 3] + square[squareCount - 1] + diamond[diamondCount - 1]) / 4.0;
-	midPointNum[midPointCount] = midPoint;
-	midPointCount++;
-	pointList.push(midPoint);
-}
