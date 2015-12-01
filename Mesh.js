@@ -1,6 +1,6 @@
 
 
-    var Mesh=function(glPlease)
+    var Mesh=function(glPlease,or,sc,of)
     {
         this.vertices = [];
         this.faces = [];
@@ -11,8 +11,23 @@
         this.elemBuff = null;
         this.normalBuff = null;
         this.xkcd=0;
+        this.orentation=or;
+        this.scale=sc;
+        this.offset=of;
     }
-    
+    Mesh.prototype.testElements = function()
+    {
+        for(var i=0; i<this.faces.length;i++)
+        {
+            if((this.faces[i][0]>= this.vertices.length)
+                || (this.faces[i][1]>= this.vertices.length)
+                || (this.faces[i][2]>= this.vertices.length) )
+            {
+                console.log(this.faces[i]);
+                console.log(i);
+            }
+        }
+    }
     Mesh.prototype.getLinearPointList = function()
     {
         ret = [];
@@ -36,13 +51,13 @@
     
        
         //scales geometry
-        modelMat=mult(modelMat, scalem(vec3(0.1,0.1,0.1)));
+        modelMat=mult(modelMat, scalem(this.scale));
         //translates geometry
-        modelMat=mult(modelMat, translate(vec3(0.0, -2.0, 10.0 )));
+        modelMat=mult(modelMat, translate(this.offset));
          //rotates geometry
-        modelMat=mult(modelMat, rotate(0, vec3(1.0, 0.0, 0.0)));
-        modelMat=mult(modelMat, rotate(0, vec3(0.0, 1.0, 0.0)));
-        modelMat=mult(modelMat, rotate(90, vec3(0.0, 1.0, 0.0)));
+        modelMat=mult(modelMat, rotate(this.orentation[0], vec3(1.0, 0.0, 0.0)));
+        modelMat=mult(modelMat, rotate(this.orentation[1], vec3(0.0, 1.0, 0.0)));
+        modelMat=mult(modelMat, rotate(this.orentation[2], vec3(0.0, 0.0, 1.0)));
 
 
         //association time!
@@ -82,9 +97,9 @@
         this.gl.drawElements(this.gl.TRIANGLES, this.faces.length*3, this.gl.UNSIGNED_SHORT, 0);
 
         //Sends new color to the GPU
-        //this.gl.uniform4fv(colorGPtr, flatten( vec4(0.0, 1.0, 1.0, 1.0)));
+        this.gl.uniform4fv(colorGPtr, flatten( vec4(0.0, 1.0, 1.0, 1.0)));
         //draws point list array as Lines
-        //this.gl.drawElements(this.gl.LINES, this.faces.length*3, this.gl.UNSIGNED_SHORT, 0);
+        this.gl.drawElements(this.gl.LINES, this.faces.length*3, this.gl.UNSIGNED_SHORT, 0);
 
     
     }
@@ -110,7 +125,7 @@
     
     }
     
-    PlyMesh = function()
+    var PlyMesh = function()
     {
         Mesh.apply(this,arguments);
     }

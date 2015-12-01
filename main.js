@@ -5,6 +5,7 @@ var pointBuff;
 var normBuff;
 var theta;
 var aspect;
+var placeMesh;
 window.onload = function init () 
 {
     console.log("INIT:");
@@ -27,9 +28,10 @@ window.onload = function init ()
     
     gl.viewport(0, 0,canvas.width, canvas.height);
     
-    
-    PlayerMesh = new PlyMesh(gl);
-    
+    PlayerMesh = new PlyMesh(gl, vec3(0, 90, 0), vec3(0.1,0.1,0.1), vec3(0.0, -2.0, 10.0));
+    placeMesh = new FlatTerrainMesh(gl, vec3(0,0,0), vec3(1,1,1), vec3(0,-1,0), 128, 128);
+    placeMesh.generate();
+    placeMesh.loadToGPU();
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() 
     {
@@ -111,8 +113,13 @@ function render()
         var projMatGPtr=gl.getUniformLocation(program, "vProjMat");
         gl.uniformMatrix4fv(projMatGPtr, false, flatten(projMat));
 
+        console.log("PlayerMesh test:");
+        PlayerMesh.testElements();
+        console.log("placeMesh")
+        placeMesh.testElements();
+        
         if (PlayerMesh.isLoaded)
             PlayerMesh.render(theta);
-        
+        placeMesh.render()
         
 }
