@@ -6,23 +6,35 @@
         //Derived from code for Interactive Computer Graphics 7th Ed.
 
         //attribute vec4 vColor;
-        attribute vec4 vPosition;
-        attribute vec4 vNormal;
-        
-        uniform mat4 vRotMat;
-        uniform mat4 vProjMat;
-        uniform vec4 vColor;
+            //Vertex position sent from the client program
+            // c == 'client' or 'cpu' program
+            attribute vec3 vPosition;
+            attribute vec3 vNormal;
+            uniform int xkcd;
+            attribute vec2 test;
+            //uniform float hExp;
 
-        varying vec4 col;
+            //Color to be sent to Fragment Shader
+            varying vec4 ucolor;
+            varying vec3 tNormal;
+            varying vec4 vPos;
 
+            //Uniform for transformation matrix
+            uniform mat4 vModelMat;
+            //Uniform for projection matrix
+            uniform mat4 vProjMat;
+            uniform mat4 vNormalMat;
+            //Uniform for vertex color
+            uniform vec4 vColor;
         void main()
         {
-            //gl_PointSize = 1.0;
-            vec4 tNormal=vNormal;
-            gl_Position = vPosition*vRotMat*vProjMat;
-            col = vColor;
+            //gl_PointSize = 100.0;
+            tNormal=vNormal;
+             gl_Position =  vProjMat * vModelMat * vec4(vPosition, 1.0);
+            ucolor = vColor;
         }
         </script>
+
 
         <script id="fragment-shader" type="x-shader/x-fragment">
         //This is a fragment shader, we'll discuss this later in the semester
@@ -30,11 +42,14 @@
 
         precision mediump float;
 
-        varying vec4 col;
+        varying vec4 ucolor;
+        varying vec3 tNormal;
 
         void main()
         {
-            gl_FragColor = col;
+            vec3 a = .6*ucolor.rgb;
+            vec3 d = .6*vec3(1.0,1.0,1.0) * max( dot(vec3(0.0,1.0,0.0), normalize(tNormal)),0.0);
+            gl_FragColor = vec4(a+d, 1.0);
         }
         </script>
         
@@ -43,6 +58,7 @@
         <script src="MV.js"></script>
         <script src="Mesh.js"></script>
         <script src="main.js"></script>
+        <!--
         <style type="text/css">
     	html, body {
     		height: 100%;
@@ -60,6 +76,7 @@
             }
         </style>
         <![endif]-->
+        -->
     </head>
     <body>
     <canvas id="gl-canvas" width="1280" height="720" style="">
