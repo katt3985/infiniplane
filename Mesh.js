@@ -25,7 +25,97 @@
         }
         return ret;
     }
-        Mesh.prototype.decodePly = function(text)
+    Mesh.prototype.render = function()
+    {
+        //this will be our model view matrix
+        var modelMat=mat4();
+        //sets the camera at the origin, facing down the z-axis, with the up vector along the y-axis
+        
+        //camera??
+        modelMat=lookAt(vec3(0, 0, 0), vec3(0, 0, 1), vec3(0, 1, 0));
+    
+       
+        //scales geometry
+        modelMat=mult(modelMat, scalem(vec3(0.1,0.1,0.1)));
+        //translates geometry
+        modelMat=mult(modelMat, translate(vec3(0.0, -2.0, 10.0 )));
+         //rotates geometry
+        modelMat=mult(modelMat, rotate(0, vec3(1.0, 0.0, 0.0)));
+        modelMat=mult(modelMat, rotate(0, vec3(0.0, 1.0, 0.0)));
+        modelMat=mult(modelMat, rotate(90, vec3(0.0, 1.0, 0.0)));
+
+
+        //association time!
+        var modelMatGPtr=gl.getUniformLocation(program, "vModelMat");
+        //Sends the rotation matrix to the GPU
+        gl.uniformMatrix4fv(modelMatGPtr, false, flatten(modelMat));
+        
+        var normalMatGPtr=this.gl.getUniformLocation(program, "vNormalMat");
+        this.gl.uniformMatrix4fv(normalMatGPtr, false, flatten(transpose(inverse(  modelMat ))));
+    
+        
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuff);
+            //associates vPosition atribute with the current buffer
+            var vPositionGPtr =this.gl.getAttribLocation(program, "vPosition");
+            this.gl.vertexAttribPointer(vPositionGPtr, 3,this.gl.FLOAT, false, 0, 0);
+            this.gl.enableVertexAttribArray(vPositionGPtr); 
+        
+           
+ 
+        
+    this.gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuff);
+        //associates vNormal atribute with the current buffer
+        var vNormalGPtr =this.gl.getAttribLocation(program, "vNormal");
+        this.gl.vertexAttribPointer(vNormalGPtr, 3,this.gl.FLOAT, false, 0, 0);
+        this.gl.enableVertexAttribArray(vNormalGPtr);
+    
+    this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.elemBuff);
+    //contex: MeshElemGBufferr
+
+        var colorGPtr = this.gl.getUniformLocation(program, "vColor");
+        //var xGPtr = this.gl.getUniformLocation(program, "xkcd");
+        //this.gl.uniform1i(xGPtr, 0);
+
+        //Sends color to the GPU as a uniform
+        this.gl.uniform4fv(colorGPtr, flatten( vec4(1.0,1.0,1.0, 1.0) ));
+        //draws point list array as Triangles
+        this.gl.drawElements(this.gl.TRIANGLES, this.faces.length*3, this.gl.UNSIGNED_SHORT, 0);
+
+        //Sends new color to the GPU
+        //this.gl.uniform4fv(colorGPtr, flatten( vec4(0.0, 1.0, 1.0, 1.0)));
+        //draws point list array as Lines
+        //this.gl.drawElements(this.gl.LINES, this.faces.length*3, this.gl.UNSIGNED_SHORT, 0);
+
+    
+    }
+    Mesh.prototype.loadToGPU = function()
+    {
+        
+               //Makes a buffer object for the points
+       this.elemBuff=this.gl.createBuffer();
+       this.vertexBuff=this.gl.createBuffer();
+       this.normalBuff=this.gl.createBuffer();
+       
+       this.isLoaded = true;
+       
+       //loads vertices into a vertex buffer
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuff);
+            this.gl.bufferData(this.gl.ARRAY_BUFFER, flatten( this.vertices  ), this.gl.STATIC_DRAW );
+        //loads normals into a buffer
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuff);
+            this.gl.bufferData(this.gl.ARRAY_BUFFER, flatten( this.normals  ),this.gl.STATIC_DRAW );
+        //loads faces into an element buffer
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.elemBuff);
+            this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER,  new Uint16Array( flatten( this.faces  )),this.gl.STATIC_DRAW );
+    
+    }
+    
+    PlyMesh = function()
+    {
+        Mesh.apply(this,arguments);
+    }
+    PlyMesh.prototype = new Mesh();
+    PlyMesh.prototype.decodePly = function(text)
     {
     var textByLine=text.split("\n");
     //window.alert("\"" + textByLine[0].trim() + "\"");
@@ -113,87 +203,3 @@
     }
     
 }
-    Mesh.prototype.render = function()
-    {
-        //this will be our model view matrix
-        var modelMat=mat4();
-        //sets the camera at the origin, facing down the z-axis, with the up vector along the y-axis
-        
-        //camera??
-        modelMat=lookAt(vec3(0, 0, 0), vec3(0, 0, 1), vec3(0, 1, 0));
-    
-       
-        //scales geometry
-        modelMat=mult(modelMat, scalem(vec3(0.1,0.1,0.1)));
-        //translates geometry
-        modelMat=mult(modelMat, translate(vec3(0.0, -2.0, 10.0 )));
-         //rotates geometry
-        //modelMat=mult(modelMat, rotate(90, vec3(1.0, 0.0, 0.0)));
-        //modelMat=mult(modelMat, rotate(190, vec3(0.0, 1.0, 0.0)));
-        modelMat=mult(modelMat, rotate(90, vec3(0.0, 1.0, 0.0)));
-
-
-        //association time!
-        var modelMatGPtr=gl.getUniformLocation(program, "vModelMat");
-        //Sends the rotation matrix to the GPU
-        gl.uniformMatrix4fv(modelMatGPtr, false, flatten(modelMat));
-        
-        var normalMatGPtr=this.gl.getUniformLocation(program, "vNormalMat");
-        this.gl.uniformMatrix4fv(normalMatGPtr, false, flatten(transpose(inverse(  modelMat ))));
-    
-        
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuff);
-            //associates vPosition atribute with the current buffer
-            var vPositionGPtr =this.gl.getAttribLocation(program, "vPosition");
-            this.gl.vertexAttribPointer(vPositionGPtr, 3,this.gl.FLOAT, false, 0, 0);
-            this.gl.enableVertexAttribArray(vPositionGPtr); 
-        
-           
- 
-        
-    this.gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuff);
-        //associates vNormal atribute with the current buffer
-        var vNormalGPtr =this.gl.getAttribLocation(program, "vNormal");
-        this.gl.vertexAttribPointer(vNormalGPtr, 3,this.gl.FLOAT, false, 0, 0);
-        this.gl.enableVertexAttribArray(vNormalGPtr);
-    
-    this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.elemBuff);
-    //contex: MeshElemGBufferr
-
-        var colorGPtr = this.gl.getUniformLocation(program, "vColor");
-        //var xGPtr = this.gl.getUniformLocation(program, "xkcd");
-        //this.gl.uniform1i(xGPtr, 0);
-
-        //Sends color to the GPU as a uniform
-        this.gl.uniform4fv(colorGPtr, flatten( vec4(1.0,1.0,1.0, 1.0) ));
-        //draws point list array as Triangles
-        this.gl.drawElements(this.gl.TRIANGLES, this.faces.length*3, this.gl.UNSIGNED_SHORT, 0);
-
-        //Sends new color to the GPU
-        //this.gl.uniform4fv(colorGPtr, flatten( vec4(0.0, 1.0, 1.0, 1.0)));
-        //draws point list array as Lines
-        //this.gl.drawElements(this.gl.LINES, this.faces.length*3, this.gl.UNSIGNED_SHORT, 0);
-
-    
-    }
-    Mesh.prototype.loadToGPU = function()
-    {
-        
-               //Makes a buffer object for the points
-       this.elemBuff=this.gl.createBuffer();
-       this.vertexBuff=this.gl.createBuffer();
-       this.normalBuff=this.gl.createBuffer();
-       
-       this.isLoaded = true;
-       
-       //loads vertices into a vertex buffer
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuff);
-            this.gl.bufferData(this.gl.ARRAY_BUFFER, flatten( this.vertices  ), this.gl.STATIC_DRAW );
-        //loads normals into a buffer
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuff);
-            this.gl.bufferData(this.gl.ARRAY_BUFFER, flatten( this.normals  ),this.gl.STATIC_DRAW );
-        //loads faces into an element buffer
-        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.elemBuff);
-            this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER,  new Uint16Array( flatten( this.faces  )),this.gl.STATIC_DRAW );
-    
-    }

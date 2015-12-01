@@ -28,7 +28,7 @@ window.onload = function init ()
     gl.viewport(0, 0,canvas.width, canvas.height);
     
     
-    PlayerMesh = new Mesh(gl);
+    PlayerMesh = new PlyMesh(gl);
     
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() 
