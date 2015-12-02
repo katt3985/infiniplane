@@ -40,7 +40,7 @@ window.onload = function init ()
             var text = xhttp.responseText;
             //window.alert(text);
             PlayerMesh.decodePly(text);
-            window.alert("Mesh has "+ PlayerMesh.vertices.length + " vertices" );
+            //window.alert("Mesh has "+ PlayerMesh.vertices.length + " vertices" );
             PlayerMesh.loadToGPU();
             
 
