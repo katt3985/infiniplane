@@ -25,26 +25,29 @@ var arrayZ = [];
 
     }
     
+      
     
     
     
     
     
-    var diamondSquareFlatTerrainMesh = function(glPlease,or,sc,of,X,Y)
+    
+    var perlinNoiseFlatTerrainMesh = function(glPlease,or,sc,of,X,Y)
     {
         Mesh.apply(this,arguments);
         this.sizeX =X;
         this.sizeY =Y;
     }
-    diamondSquareFlatTerrainMesh.prototype = new Mesh();
+    dperlinNoiseFlatTerrainMesh.prototype = new Mesh();
     
-    diamondSquareFlatTerrainMesh.prototype.generate = function()
+    perlinNoiseFlatTerrainMesh.prototype.generate = function()
     {
+    	simplexPerlinNoise(this.sizeX, this.sizeY);
         for(var i=0; i< this.sizeY;i++)
         {
             for(var j=0; j<this.sizeX;j++)
             {
-                this.vertices.push(vec3(j, pointList[i],i));
+                this.vertices.push(vec3(j, perlinArray[j][i],i));
                 if(i<this.sizeY-1 && j<this.sizeX-1)
                 {
                     this.faces.push(vec3( this.vertices.length -1, this.vertices.length, this.vertices.length-1+this.sizeX ));
@@ -59,7 +62,26 @@ var arrayZ = [];
     
     
     
+var perlinArray = [];
+
+function simplexPerlinNoise(width, height)
+{
+	var frequency = 5.0 / parseFloat(width);
+	for(var x = 0; x < width; x++)
+	{
+		for(var y = 0; y < height; y++)
+		{
+			perlinArray[x][y] = parseFloat(noise(x * frequency, y * frequency);
+			perlinArray[x][y] = (perlinArray[x][y] + 1.0) / 2.0;
+		}
+	}
+}    
     
+
+    
+    
+    
+/*    
 var squareCount = 0;
 var diamondCount = 0;
 var midPointCount = 0;
@@ -290,3 +312,4 @@ function average(x, y, vz)
 {
 	return (x + y + z) / 3.0;
 }
+*/

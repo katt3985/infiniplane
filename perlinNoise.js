@@ -20,6 +20,23 @@ function perlinNoise()
 
 
 
+/*simplex perlin noise*/
+var perlinArray = [];
+
+function simplexPerlinNoise(width, height)
+{
+	var frequency = 5.0 / parseFloat(width);
+	for(var x = 0; x < width; x++)
+	{
+		for(var y = 0; y < height; y++)
+		{
+			perlinArray[x][y] = parseFloat(noise(x * frequency, y * frequency);
+			perlinArray[x][y] = (perlinArray[x][y] + 1.0) / 2.0;
+		}
+	}
+}
+
+
 /*Just another method of doing this*/
 /*
 function fractionalBownianMoment(var x, var y, var z, var octaves = 8, var lacunarity = 2.0, var gain = 0.5)
