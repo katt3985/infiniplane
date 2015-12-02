@@ -27,8 +27,18 @@ var arrayZ = [];
     }
 */    
       
-
-    
+function clamp(v,max,min)
+{
+    if(v<min)
+        return min;
+    else if(v>max)
+        return max;
+    else
+        return v;
+}
+ var Gradient = [];
+ var SizeX;
+ var SizeY;
     
     
     var perlinNoiseFlatTerrainMesh = function(glPlease,or,sc,of,X,Y)
@@ -36,15 +46,17 @@ var arrayZ = [];
         Mesh.apply(this,arguments);
         this.sizeX =X;
         this.sizeY =Y;
+        SizeX=X;
+        SizeY=Y;
     }
     perlinNoiseFlatTerrainMesh.prototype = new Mesh();
     
     perlinNoiseFlatTerrainMesh.prototype.generate = function()
     {
-    	for(var i = 0; i < X; i++)
+    	for(var i = 0; i < this.sizeX; i++)
 		{
 			Gradient[i] = [];
-			for(var j = 0; j < Y; j++)
+			for(var j = 0; j < this.sizeY; j++)
 			{
 				Gradient[i][j] = normalize(vec2((Math.random() * 2) - 1, ((Math.random() * 2) - 1)));
 			}
@@ -69,31 +81,29 @@ var arrayZ = [];
 
 
 
-var gradient = [];
 
 // Function to linearly interpolate between a0 and a1
  // Weight w should be in the range [0.0, 1.0]
-function interpolate(var a, float b, float w)
+function interpolate( a, b, w)
 {
 	return ((1.0 - w) * a) + (w * b);
 }
   
   // Computes the dot product of the distance and gradient vectors.  
-function dotGridGradient(var ix, var iy, var x, var y)
+function dotGridGradient( ix,  iy,  x,  y)
 {
 	// Precomputed (or otherwise) gradient vectors at each grid point X,Y
-	var gradient[x][y][2];
 	
 	// Compute the distance vector
 	var dx = x - ix;
 	var dy = y - iy;
 	
 	// Compute the dot-product
-	return (dx * Gradient[iy][ix][0] + dy * Gradient[iy][ix]1);
+	return (dx * Gradient[clamp(iy,SizeY-1,0)][clamp(ix,SizeX-1,0)][0] + dy * Gradient[clamp(iy,SizeY-1,0)][clamp(ix,SizeX-1,0)][1]);
 }
 
 // Compute Perlin noise at coordinates x, y
-function perlin(var x, var y)
+function perlin(x,  y)
 {
 	// Determine grid cell coordinates
 	var x0 = 0.0;

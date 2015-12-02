@@ -14,6 +14,12 @@
         this.orentation=or;
         this.scale=sc;
         this.offset=of;
+        this.SolidColor=vec3(1.0,1.0,1.0);
+        this.LineColor=vec3(0.0,1.0,1.0);
+        this.useLines=true;
+        this.useTexture=false;
+        this.useNormals=false;
+
     }
     Mesh.prototype.testElements = function()
     {
@@ -96,11 +102,13 @@
         this.gl.uniform4fv(colorGPtr, flatten( vec4(1.0,1.0,1.0, 1.0) ));
         //draws point list array as Triangles
         this.gl.drawElements(this.gl.TRIANGLES, this.faces.length*3, this.gl.UNSIGNED_SHORT, 0);
-
-        //Sends new color to the GPU
-        this.gl.uniform4fv(colorGPtr, flatten( vec4(0.0, 1.0, 1.0, 1.0)));
-        //draws point list array as Lines
-        this.gl.drawElements(this.gl.LINES, this.faces.length*3, this.gl.UNSIGNED_SHORT, 0);
+        if(this.useLines)
+        {
+            //Sends new color to the GPU
+            this.gl.uniform4fv(colorGPtr, flatten( vec4(0.0, 1.0, 1.0, 1.0)));
+            //draws point list array as Lines
+            this.gl.drawElements(this.gl.LINES, this.faces.length*3, this.gl.UNSIGNED_SHORT, 0);
+        }
 
     
     }
@@ -118,8 +126,12 @@
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuff);
             this.gl.bufferData(this.gl.ARRAY_BUFFER, flatten( this.vertices  ), this.gl.STATIC_DRAW );
         //loads normals into a buffer
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuff);
+        if(this.normals.length > 0)
+        {
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuff);
             this.gl.bufferData(this.gl.ARRAY_BUFFER, flatten( this.normals  ),this.gl.STATIC_DRAW );
+            this.useNormals=true
+        }
         //loads faces into an element buffer
         this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.elemBuff);
             this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER,  new Uint16Array( flatten( this.faces  )),this.gl.STATIC_DRAW );

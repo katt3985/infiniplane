@@ -36,7 +36,8 @@ window.onload = function init ()
     gl.viewport(0, 0,canvas.width, canvas.height);
     
     PlayerMesh = new PlyMesh(gl, vec3(0, 90, 0), vec3(0.1,0.1,0.1), vec3(0.0, -2.0, 10.0));
-    placeMesh = new diamondSquareFlatTerrainMesh(gl, vec3(0,0,0), vec3(1,1,1), vec3(0,-1,0), 128, 128);
+    PlayerMesh.useLines=false;
+    placeMesh = new perlinNoiseFlatTerrainMesh(gl, vec3(0,0,0), vec3(1,1,1), vec3(0,-1,0), 128, 128);
     placeMesh.generate();
     placeMesh.loadToGPU();
     var xhttp = new XMLHttpRequest();
