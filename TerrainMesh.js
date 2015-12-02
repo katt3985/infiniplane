@@ -1,3 +1,4 @@
+/*
 var arrayZ = [];
 
     var FlatTerrainMesh = function(glPlease,or,sc,of,X,Y)
@@ -24,11 +25,9 @@ var arrayZ = [];
         }
 
     }
-    
+*/    
       
-    
-    
-    
+
     
     
     
@@ -38,16 +37,24 @@ var arrayZ = [];
         this.sizeX =X;
         this.sizeY =Y;
     }
-    dperlinNoiseFlatTerrainMesh.prototype = new Mesh();
+    perlinNoiseFlatTerrainMesh.prototype = new Mesh();
     
     perlinNoiseFlatTerrainMesh.prototype.generate = function()
     {
-    	simplexPerlinNoise(this.sizeX, this.sizeY);
+    	for(var i = 0; i < X; i++)
+		{
+			Gradient[i] = [];
+			for(var j = 0; j < Y; j++)
+			{
+				Gradient[i][j] = normalize(vec2((Math.random() * 2) - 1, ((Math.random() * 2) - 1)));
+			}
+		}
+    
         for(var i=0; i< this.sizeY;i++)
         {
             for(var j=0; j<this.sizeX;j++)
             {
-                this.vertices.push(vec3(j, perlinArray[j][i],i));
+                this.vertices.push(vec3(j, perlin(j,i), i));
                 if(i<this.sizeY-1 && j<this.sizeX-1)
                 {
                     this.faces.push(vec3( this.vertices.length -1, this.vertices.length, this.vertices.length-1+this.sizeX ));
@@ -58,26 +65,103 @@ var arrayZ = [];
 
     }
     
+
+
+
+
+var gradient = [];
+
+// Function to linearly interpolate between a0 and a1
+ // Weight w should be in the range [0.0, 1.0]
+function interpolate(var a, float b, float w)
+{
+	return ((1.0 - w) * a) + (w * b);
+}
+  
+  // Computes the dot product of the distance and gradient vectors.  
+function dotGridGradient(var ix, var iy, var x, var y)
+{
+	// Precomputed (or otherwise) gradient vectors at each grid point X,Y
+	var gradient[x][y][2];
+	
+	// Compute the distance vector
+	var dx = x - ix;
+	var dy = y - iy;
+	
+	// Compute the dot-product
+	return (dx * Gradient[iy][ix][0] + dy * Gradient[iy][ix]1);
+}
+
+// Compute Perlin noise at coordinates x, y
+function perlin(var x, var y)
+{
+	// Determine grid cell coordinates
+	var x0 = 0.0;
+	if(x > 0.0)
+	{
+		x0 = x;
+	}
+	else
+	{
+		x0 = x - 1.0;
+	}
+	var x1 = x0 + 1.0;
+	var y0 = 0.0;
+	if(y > 0.0)
+	{
+		y0 = y;
+	}
+	else
+	{
+		y0 = y - 1.0;
+	}
+	var y1 = y0 + 1;
+	
+	// Determine interpolation weights
+     // Could also use higher order polynomial/s-curve here
+	var sx = x - x0;
+	var sy = y - y0;
+	
+	// Interpolate between grid point gradients
+	var n0, n1, ix0, ix1, value;
+	n0 = dotGridGradient(x0, y0, x, y)
+	n1 = dotGridGradient(x1, y0, x, y);
+	ix0 = interpolate(n0, n1, sx);
+	n0 = dotGridGradient(x0, y1, x, y);
+	n1 = dotGridGradient(x1, y1, x, y);
+	ix1 = interpolate(n0, n1, sx);
+	value = interpolate(ix0, ix1, sy);
+	
+	return value;
+}
+
+
+
+
+
+
     
     
-    
+
+
+/*    
     
 var perlinArray = [];
 
-function simplexPerlinNoise(width, height)
+function perlinNoise(width, height)
 {
 	var frequency = 5.0 / parseFloat(width);
 	for(var x = 0; x < width; x++)
 	{
 		for(var y = 0; y < height; y++)
 		{
-			perlinArray[x][y] = parseFloat(noise(x * frequency, y * frequency);
+			perlinArray[x][y] = parseFloat(noise(x * frequency, y * frequency));
 			perlinArray[x][y] = (perlinArray[x][y] + 1.0) / 2.0;
 		}
 	}
-}    
-    
+}
 
+*/
     
     
     
