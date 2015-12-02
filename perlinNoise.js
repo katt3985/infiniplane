@@ -20,7 +20,6 @@ function perlinNoise()
 
 
 
-
 /*Just another method of doing this*/
 /*
 function fractionalBownianMoment(var x, var y, var z, var octaves = 8, var lacunarity = 2.0, var gain = 0.5)

@@ -44,7 +44,7 @@ var arrayZ = [];
         {
             for(var j=0; j<this.sizeX;j++)
             {
-                this.vertices.push(vec3(j, Math.random(),i));
+                this.vertices.push(vec3(j, pointList[i],i));
                 if(i<this.sizeY-1 && j<this.sizeX-1)
                 {
                     this.faces.push(vec3( this.vertices.length -1, this.vertices.length, this.vertices.length-1+this.sizeX ));
