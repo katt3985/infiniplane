@@ -33,7 +33,7 @@ var pointList = [];
 var i = 0;
 
 
-function diamondSquare(var topLeft, var topRight, var bottomLeft, var bottomRight)
+function diamondSquare(topLeft, topRight, bottomLeft, bottomRight)
 {
 	//top left side
 	if(i == 5) // NEED TO SET THIS TO ONE PIXEL
@@ -218,13 +218,13 @@ function diamondSquare(var topLeft, var topRight, var bottomLeft, var bottomRigh
 }
 
 
-function midPointAverage(var topL, var topR, var bottomL, var bottomR)
+function midPointAverage(topL, topR, bottomL, bottomR)
 {
 	return (topL + topR + bottomL + bottomR) / 4.0;
 }
 
 
-function average(var x, var y, var z)
+function average(x, y, vz)
 {
 	return (x + y + z) / 3.0;
 }
