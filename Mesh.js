@@ -40,7 +40,7 @@
         }
         return ret;
     }
-    Mesh.prototype.render = function()
+    Mesh.prototype.render = function(viewM)
     {
         //this will be our model view matrix
         var modelMat=mat4();
@@ -59,7 +59,8 @@
         modelMat=mult(modelMat, rotate(this.orentation[1], vec3(0.0, 1.0, 0.0)));
         modelMat=mult(modelMat, rotate(this.orentation[2], vec3(0.0, 0.0, 1.0)));
 
-
+        if(arguments.length >= 1)
+            modelMat=mult(modelMat, viewM);
         //association time!
         var modelMatGPtr=gl.getUniformLocation(program, "vModelMat");
         //Sends the rotation matrix to the GPU
