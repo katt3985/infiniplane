@@ -62,11 +62,14 @@ function clamp(v,max,min)
 			}
 		}
     
+    	var octaves = 0.0;
+    	var lacunarity = 0.0;
+    	var gain = 0.0;
         for(var i=0; i< this.sizeY;i++)
         {
             for(var j=0; j<this.sizeX;j++)
             {
-            	var p = perlin(j,i);
+            	var p = fBM(j, i, 8.0, 2.0, 0.5);
                 this.vertices.push(vec3(j, p, i));
                 //document.write("perlin val: " + p + "<br>");
                 if(i<this.sizeY-1 && j<this.sizeX-1)
@@ -149,21 +152,32 @@ function perlin(x,  y)
 	
 	// Interpolate between grid point gradients
 	var n0, n1, ix0, ix1, value;
-	n0 = parseFloat(dotGridGradient(x0, y0, x, y)); //has val
-	n1 = parseFloat(dotGridGradient(x1, y0, x, y)); //has val
-	ix0 = parseFloat(interpolate(n0, n1, sx)); //has val
-	n0 = parseFloat(dotGridGradient(x0, y1, x, y)); // has val on FIRST returns 0 after that
-	n1 = parseFloat(dotGridGradient(x1, y1, x, y)); // has val on SECOND returns 0 after that
-	ix1 = parseFloat(interpolate(n0, n1, sx)); // returns 0
-	value = parseFloat(interpolate(ix0, ix1, sy)); //returns 0
+	n0 = parseFloat(dotGridGradient(x0, y0, x, y));
+	n1 = parseFloat(dotGridGradient(x1, y0, x, y));
+	ix0 = parseFloat(interpolate(n0, n1, sx));
+	n0 = parseFloat(dotGridGradient(x0, y1, x, y));
+	n1 = parseFloat(dotGridGradient(x1, y1, x, y));
+	ix1 = parseFloat(interpolate(n0, n1, sx));
+	value = parseFloat(interpolate(ix0, ix1, sy)); 
 	
-	return parseFloat(value); //returns 0
+	return parseFloat(value);
 }
 
 
 
-
-
+function fBM(x, z, octaves /*8*/, lacunarity /*2.0*/, gain /*0.5*/)
+{
+    var amplitude = 1.0;
+    var frequency = 1.0;
+    var sum = 0.0;
+    for(var i = 0; i < octaves; i++)
+    {
+        sum += amplitude * perlin(x * frequency, z * frequency);
+        amplitude *= gain;
+        frequency *= lacunarity;
+    }
+    return sum;
+}
 
     
     
