@@ -58,7 +58,7 @@ function clamp(v,max,min)
 			Gradient[i] = [];
 			for(var j = 0; j < this.sizeY; j++)
 			{
-				Gradient[i][j] = normalize(vec2((Math.random() * 2) - 1, ((Math.random() * 2) - 1)));
+				Gradient[i][j] = normalize(vec2((Math.random() * 2.0) - 1.0, ((Math.random() * 2.0) - 1.0)));
 			}
 		}
     
@@ -66,7 +66,9 @@ function clamp(v,max,min)
         {
             for(var j=0; j<this.sizeX;j++)
             {
-                this.vertices.push(vec3(j, perlin(j,i), i));
+            	var p = perlin(j,i);
+                this.vertices.push(vec3(j, p, i));
+                document.write("perlin val: " + p + "<br>");
                 if(i<this.sizeY-1 && j<this.sizeX-1)
                 {
                     this.faces.push(vec3( this.vertices.length -1, this.vertices.length, this.vertices.length-1+this.sizeX ));
@@ -82,29 +84,42 @@ function clamp(v,max,min)
 
 
 
-// Function to linearly interpolate between a0 and a1
+// Function to linearly interpolate between a and b
  // Weight w should be in the range [0.0, 1.0]
-function interpolate( a, b, w)
+function interpolate(a, b, w)
 {
-	return ((1.0 - w) * a) + (w * b);
+	a = parseFloat(a);
+	b = parseFloat(b);
+	w = parseFloat(w);
+	document.write("Interpolate val: " + parseFloat((1.0 - w) * a + (w * b)) + "<br>");
+	return parseFloat((1.0 - w) * a + (w * b));
 }
   
-  // Computes the dot product of the distance and gradient vectors.  
-function dotGridGradient( ix,  iy,  x,  y)
+// Computes the dot product of the distance and gradient vectors.  
+function dotGridGradient(ix,  iy,  x,  y)
 {
+	ix = parseFloat(ix);
+	iy = parseFloat(iy);
+	x = parseFloat(x);
+	y = parseFloat(y);
+
 	// Precomputed (or otherwise) gradient vectors at each grid point X,Y
+	
 	
 	// Compute the distance vector
 	var dx = x - ix;
 	var dy = y - iy;
 	
 	// Compute the dot-product
-	return (dx * Gradient[clamp(iy,SizeY-1,0)][clamp(ix,SizeX-1,0)][0] + dy * Gradient[clamp(iy,SizeY-1,0)][clamp(ix,SizeX-1,0)][1]);
+	document.write("dotGridGradient val: " + parseFloat(normalize(dx * Gradient[clamp(iy,SizeY-1.0,0)][clamp(ix,SizeX-1.0,0)][0] + dy * Gradient[clamp(iy,SizeY-1.0,0)][clamp(ix,SizeX-1.0,0)][1])) + "<br>");
+	return parseFloat(normalize(dx * Gradient[clamp(iy,SizeY-1.0,0)][clamp(ix,SizeX-1.0,0)][0] + dy * Gradient[clamp(iy,SizeY-1.0,0)][clamp(ix,SizeX-1.0,0)][1]));
 }
 
 // Compute Perlin noise at coordinates x, y
 function perlin(x,  y)
 {
+	x = parseFloat(x);
+	y = parseFloat(y);
 	// Determine grid cell coordinates
 	var x0 = 0.0;
 	if(x > 0.0)
@@ -125,24 +140,24 @@ function perlin(x,  y)
 	{
 		y0 = y - 1.0;
 	}
-	var y1 = y0 + 1;
+	var y1 = y0 + 1.0;
 	
 	// Determine interpolation weights
-     // Could also use higher order polynomial/s-curve here
+    // Could also use higher order polynomial/s-curve here
 	var sx = x - x0;
 	var sy = y - y0;
 	
 	// Interpolate between grid point gradients
 	var n0, n1, ix0, ix1, value;
-	n0 = dotGridGradient(x0, y0, x, y)
-	n1 = dotGridGradient(x1, y0, x, y);
-	ix0 = interpolate(n0, n1, sx);
-	n0 = dotGridGradient(x0, y1, x, y);
-	n1 = dotGridGradient(x1, y1, x, y);
-	ix1 = interpolate(n0, n1, sx);
-	value = interpolate(ix0, ix1, sy);
+	n0 = parseFloat(dotGridGradient(x0, y0, x, y)); //has val
+	n1 = parseFloat(dotGridGradient(x1, y0, x, y)); //has val
+	ix0 = parseFloat(interpolate(n0, n1, sx)); //has val
+	n0 = parseFloat(dotGridGradient(x0, y1, x, y)); // has val on FIRST returns 0 after that
+	n1 = parseFloat(dotGridGradient(x1, y1, x, y)); // has val on SECOND returns 0 after that
+	ix1 = parseFloat(interpolate(n0, n1, sx)); // returns 0
+	value = parseFloat(interpolate(ix0, ix1, sy)); //returns 0
 	
-	return value;
+	return parseFloat(value); //returns 0
 }
 
 
