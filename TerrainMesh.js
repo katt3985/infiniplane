@@ -68,7 +68,7 @@ function clamp(v,max,min)
             {
             	var p = perlin(j,i);
                 this.vertices.push(vec3(j, p, i));
-                document.write("perlin val: " + p + "<br>");
+                //document.write("perlin val: " + p + "<br>");
                 if(i<this.sizeY-1 && j<this.sizeX-1)
                 {
                     this.faces.push(vec3( this.vertices.length -1, this.vertices.length, this.vertices.length-1+this.sizeX ));
@@ -91,7 +91,7 @@ function interpolate(a, b, w)
 	a = parseFloat(a);
 	b = parseFloat(b);
 	w = parseFloat(w);
-	document.write("Interpolate val: " + parseFloat((1.0 - w) * a + (w * b)) + "<br>");
+	//document.write("Interpolate val: " + parseFloat((1.0 - w) * a + (w * b)) + "<br>");
 	return parseFloat((1.0 - w) * a + (w * b));
 }
   
@@ -111,7 +111,7 @@ function dotGridGradient(ix,  iy,  x,  y)
 	var dy = y - iy;
 	
 	// Compute the dot-product
-	document.write("dotGridGradient val: " + parseFloat(normalize(dx * Gradient[clamp(iy,SizeY-1.0,0)][clamp(ix,SizeX-1.0,0)][0] + dy * Gradient[clamp(iy,SizeY-1.0,0)][clamp(ix,SizeX-1.0,0)][1])) + "<br>");
+	//document.write("dotGridGradient val: " + parseFloat(normalize(dx * Gradient[clamp(iy,SizeY-1.0,0)][clamp(ix,SizeX-1.0,0)][0] + dy * Gradient[clamp(iy,SizeY-1.0,0)][clamp(ix,SizeX-1.0,0)][1])) + "<br>");
 	return parseFloat(normalize(dx * Gradient[clamp(iy,SizeY-1.0,0)][clamp(ix,SizeX-1.0,0)][0] + dy * Gradient[clamp(iy,SizeY-1.0,0)][clamp(ix,SizeX-1.0,0)][1]));
 }
 
@@ -130,7 +130,7 @@ function perlin(x,  y)
 	{
 		x0 = x - 1.0;
 	}
-	var x1 = x0 + 1.0;
+	var x1 = x + 1.0;
 	var y0 = 0.0;
 	if(y > 0.0)
 	{
@@ -140,7 +140,7 @@ function perlin(x,  y)
 	{
 		y0 = y - 1.0;
 	}
-	var y1 = y0 + 1.0;
+	var y1 = y + 1.0;
 	
 	// Determine interpolation weights
     // Could also use higher order polynomial/s-curve here
