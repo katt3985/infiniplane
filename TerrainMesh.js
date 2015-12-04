@@ -70,7 +70,10 @@ function clamp(v,max,min)
             for(var j=0; j<this.sizeX;j++)
             {
             	var p = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
-            	var newVal = p + 2.0;
+            	var q = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
+            	var r = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
+            	var s = r + q + p;
+            	var newVal = s + 2.0;
             	newVal /= 2.0;
             	newVal *= 255;
             	newVal = parseInt(newVal);
