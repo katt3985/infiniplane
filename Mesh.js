@@ -14,8 +14,8 @@
         this.orentation=or;
         this.scale=sc;
         this.offset=of;
-        this.SolidColor=vec3(1.0,1.0,1.0);
-        this.LineColor=vec3(0.0,1.0,1.0);
+        this.SolidColor=vec4(1.0,1.0,1.0, 1,0);
+        this.LineColor=vec4(0.0,1.0,1.0, 1.0);
         this.useLines=true;
         this.useTexture=false;
         this.useNormals=false;
@@ -99,13 +99,13 @@
         //this.gl.uniform1i(xGPtr, 0);
 
         //Sends color to the GPU as a uniform
-        this.gl.uniform4fv(colorGPtr, flatten( vec4(1.0,1.0,1.0, 1.0) ));
+        this.gl.uniform4fv(colorGPtr, flatten( this.SolidColor ));
         //draws point list array as Triangles
         this.gl.drawElements(this.gl.TRIANGLES, this.faces.length*3, this.gl.UNSIGNED_SHORT, 0);
         if(this.useLines)
         {
             //Sends new color to the GPU
-            this.gl.uniform4fv(colorGPtr, flatten( vec4(0.0, 1.0, 1.0, 1.0)));
+            this.gl.uniform4fv(colorGPtr, flatten( this.LineColor));
             //draws point list array as Lines
             this.gl.drawElements(this.gl.LINES, this.faces.length*3, this.gl.UNSIGNED_SHORT, 0);
         }

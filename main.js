@@ -7,7 +7,7 @@ var move;
 var aspect;
 var placeMesh;
 var currentlyPressedKeys = {};
-var loc=vec3(0,0,0);
+var loc=vec3(0,20,0);
 var rot=vec3(0,0,0);
 var look=vec3(0,0,0);
 var velocity=0;
@@ -38,6 +38,8 @@ window.onload = function init ()
     PlayerMesh = new PlyMesh(gl, vec3(0, 90, 0), vec3(0.1,0.1,0.1), vec3(0.0, -2.0, 10.0));
     PlayerMesh.useLines=false;
     placeMesh = new perlinNoiseFlatTerrainMesh(gl, vec3(0,0,0), vec3(1,1,1), vec3(0,-1,0), 128, 128);
+    placeMesh.SolidColor=vec4(0.0, 1.0, 0.0 ,1.0);
+    placeMesh.LineColor=vec4(0.0,0.0,0.0,1.0);
     placeMesh.generate();
     placeMesh.loadToGPU();
     var xhttp = new XMLHttpRequest();
