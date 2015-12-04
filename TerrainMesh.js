@@ -30,17 +30,17 @@ var arrayZ = [];
 function clamp(v,max,min)
 {
     if(v<min)
-        return min;
+        return parseFloat(min);
     else if(v>max)
-        return max;
+        return parseFloat(max);
     else
-        return v;
+        return parseFloat(v);
 }
  var Gradient = [];
  var SizeX;
  var SizeY;
     
-    
+   
     var perlinNoiseFlatTerrainMesh = function(glPlease,or,sc,of,X,Y)
     {
         Mesh.apply(this,arguments);
@@ -62,14 +62,19 @@ function clamp(v,max,min)
 			}
 		}
     
-    	var octaves = 0.0;
-    	var lacunarity = 0.0;
-    	var gain = 0.0;
+    	var octaves = parseFloat(document.getElementById("octaves").value);
+    	var lacunarity = parseFloat(document.getElementById("lacunarity").value);
+    	var gain = parseFloat(document.getElementById("gain").value);
         for(var i=0; i< this.sizeY;i++)
         {
             for(var j=0; j<this.sizeX;j++)
             {
-            	var p = fBM(j, i, 8.0, 2.0, 0.5);
+            	var p = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
+            	var newVal = p + 2.0;
+            	newVal /= 2.0;
+            	newVal *= 255;
+            	newVal = parseInt(newVal);
+            	//document.write(newVal + " " + newVal + " " + newVal + " ");
                 this.vertices.push(vec3(j, p, i));
                 //document.write("perlin val: " + p + "<br>");
                 if(i<this.sizeY-1 && j<this.sizeX-1)
@@ -125,7 +130,7 @@ function perlin(x,  y)
 	y = parseFloat(y);
 	// Determine grid cell coordinates
 	var x0 = 0.0;
-	if(x > 0.0)
+	if(x < 0.0)
 	{
 		x0 = x;
 	}
@@ -135,7 +140,7 @@ function perlin(x,  y)
 	}
 	var x1 = x + 1.0;
 	var y0 = 0.0;
-	if(y > 0.0)
+	if(y < 0.0)
 	{
 		y0 = y;
 	}
@@ -147,8 +152,8 @@ function perlin(x,  y)
 	
 	// Determine interpolation weights
     // Could also use higher order polynomial/s-curve here
-	var sx = x - x0;
-	var sy = y - y0;
+	var sx = parseFloat(x) - parseFloat(x0);
+	var sy = parseFloat(y) - parseFloat(y0);
 	
 	// Interpolate between grid point gradients
 	var n0, n1, ix0, ix1, value;
