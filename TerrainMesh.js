@@ -26,7 +26,10 @@ var arrayZ = [];
 
     }
 */    
-      
+
+var pointList = [];
+var newPointList = [];
+
 function clamp(v,max,min)
 {
     if(v<min)
@@ -62,23 +65,12 @@ function clamp(v,max,min)
 			}
 		}
     
-    	var octaves = parseFloat(document.getElementById("octaves").value);
-    	var lacunarity = parseFloat(document.getElementById("lacunarity").value);
-    	var gain = parseFloat(document.getElementById("gain").value);
-        for(var i=0; i< this.sizeY;i++)
-        {
-            for(var j=0; j<this.sizeX;j++)
-            {
-            	var p = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
-            	var q = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
-            	var r = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
-            	var s = r + q + p;
-            	var newVal = s + 2.0;
-            	newVal /= 2.0;
-            	newVal *= 255;
-            	newVal = parseInt(newVal);
-            	//document.write(newVal + " " + newVal + " " + newVal + " ");
-                this.vertices.push(vec3(j, p, i));
+    	doStuff(this.sizeX, this.sizeY);
+    	for(var j = 0; j < this.sizeX; j++)
+    	{
+    		for(var i = 0; i < this.sizeY; i++)
+    		{
+                this.vertices.push(vec3(j, newPointList[j][i], i));
                 //document.write("perlin val: " + p + "<br>");
                 if(i<this.sizeY-1 && j<this.sizeX-1)
                 {
@@ -91,7 +83,36 @@ function clamp(v,max,min)
     }
     
 
-
+function doStuff(sizeX, sizeZ)
+{
+	var octaves = parseFloat(document.getElementById("octaves").value);
+    var lacunarity = parseFloat(document.getElementById("lacunarity").value);
+    var gain = parseFloat(document.getElementById("gain").value);
+    for(var j=0; j< sizeX;j++)
+    {
+        pointList[j] = []
+        for(var i=0; i<sizeZ;i++)
+        {
+            var p = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
+            var q = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
+            var r = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
+            var s = (r + q + p) / 3.0;
+            pointList[j][i] = s;
+        }
+    }
+    smooth(sizeX, sizeZ);
+    for(var j = 0; j < sizeX; j++)
+    {
+    	for(var i = 0; i < sizeZ; i++)
+    	{
+    		var newVal = newPointList[j][i] + 2.0;
+   			newVal /= 2.0;
+    		newVal *= 255;
+    		newVal = parseInt(newVal);
+    		//document.write(newVal + " " + newVal + " " + newVal + " ");
+    	}
+    }
+}
 
 
 
@@ -187,7 +208,25 @@ function fBM(x, z, octaves /*8*/, lacunarity /*2.0*/, gain /*0.5*/)
     return sum;
 }
 
-    
+function smooth(sizeX, sizeZ)
+{
+	for(var x = 0; x < sizeX; x++)
+	{
+		newPointList[x] = [];
+		for(var z = 0; z < sizeZ; z++)
+		{
+			if(x > 0 && z > 0 && x < sizeX - 1 && z < sizeZ - 1)
+			{
+				var avgHeight = (pointList[x][z] + pointList[x-1][z] + pointList[x][z-1] +
+			 	pointList[x-1][z-1] + pointList[x+1][z] + pointList[x][z+1] +
+			 	pointList[x+1][z+1] + pointList[x-1][z+1] + pointList[x+1][z-1]) / 9.0;
+			 	newPointList[x][z] = avgHeight;
+			}
+			else
+				newPointList[x][z] = pointList[x][z];
+		}
+	}
+}
     
 
 
