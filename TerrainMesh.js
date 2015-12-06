@@ -96,7 +96,7 @@ function doStuff(sizeX, sizeZ)
             var p = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
             var q = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
             var r = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
-            var s = (r + q + p) / 3.0;
+            var s = (p + q + r);
             pointList[j][i] = s;
         }
     }
@@ -208,6 +208,7 @@ function fBM(x, z, octaves /*8*/, lacunarity /*2.0*/, gain /*0.5*/)
     return sum;
 }
 
+var avgHeight = 0.0;
 function smooth(sizeX, sizeZ)
 {
 	for(var x = 0; x < sizeX; x++)
@@ -217,13 +218,28 @@ function smooth(sizeX, sizeZ)
 		{
 			if(x > 0 && z > 0 && x < sizeX - 1 && z < sizeZ - 1)
 			{
-				var avgHeight = (pointList[x][z] + pointList[x-1][z] + pointList[x][z-1] +
-			 	pointList[x-1][z-1] + pointList[x+1][z] + pointList[x][z+1] +
-			 	pointList[x+1][z+1] + pointList[x-1][z+1] + pointList[x+1][z-1]) / 9.0;
+				avgHeight = (pointList[x][z] + pointList[x-1][z] + pointList[x][z-1] +
+			 					 pointList[x-1][z-1] + pointList[x+1][z] + pointList[x][z+1] +
+			 					 pointList[x+1][z+1] + pointList[x-1][z+1] + pointList[x+1][z-1]) / 9.0;
 			 	newPointList[x][z] = avgHeight;
 			}
 			else
 				newPointList[x][z] = pointList[x][z];
+		}
+	}
+	for(var x = 0; x < sizeX; x++)
+	{
+		for(var z = 0; z < sizeZ; z++)
+		{
+			if(x > 0 && z > 0 && x < sizeX - 1 && z < sizeZ - 1)
+			{
+				avgHeight = (newPointList[x][z] + newPointList[x-1][z] + newPointList[x][z-1] +
+			 					 newPointList[x-1][z-1] + newPointList[x+1][z] + newPointList[x][z+1] +
+			 					 newPointList[x+1][z+1] + newPointList[x-1][z+1] + newPointList[x+1][z-1]) / 9.0;
+			 	newPointList[x][z] = avgHeight;
+			}
+			else
+				newPointList[x][z] = newPointList[x][z] / 2.0;
 		}
 	}
 }
