@@ -37,24 +37,36 @@ window.onload = function init ()
     
     PlayerMesh = new PlyMesh(gl, vec3(0, 90, 0), vec3(0.1,0.1,0.1), vec3(0.0, -2.0, 10.0));
     PlayerMesh.useLines=false;
-    for(var i=0;i<4;i++)
+    for(var i=0;i<5;i++)
     {
-        placeMesh[i] = new perlinNoiseTerrainMesh(gl, vec3(0,0,0), vec3(1,1,1), vec3(0,-1,i*128), 128, 128);
-        placeMesh[i].SolidColor=vec4(0.0, 1.0, 0.0 ,1.0);
+    	placeMesh[i] = new perlinNoiseTerrainMesh(gl, vec3(0,0,0), vec3(1,1,1), vec3(0,-1,i*256), 256, 256);
+    	placeMesh[i].SolidColor=vec4(0.0, 1.0, 0.0 ,1.0);
         placeMesh[i].LineColor=vec4(0.0,0.0,0.0,1.0);
         placeMesh[i].generate();
-        placeMesh[i].loadToGPU();
+    	placeMesh[i].loadToGPU();
+    	/*
+    	placeMesh2[i] = new perlinNoiseTerrainMesh(gl, vec3(0,0,0), vec3(1,1,1), vec3(i*128,-1,256), 256, 256);
+    	placeMesh2[i].SolidColor=vec4(0.0, 1.0, 0.0 ,1.0);
+        placeMesh2[i].LineColor=vec4(0.0,0.0,0.0,1.0);
+        placeMesh2[i].generate();
+    	placeMesh2[i].loadToGPU();
+    	placeMesh3[i] = new perlinNoiseTerrainMesh(gl, vec3(0,0,0), vec3(1,1,1), vec3(512,-1,i*128), 256, 256);
+    	placeMesh3[i].SolidColor=vec4(0.0, 1.0, 0.0 ,1.0);
+        placeMesh3[i].LineColor=vec4(0.0,0.0,0.0,1.0);
+        placeMesh3[i].generate();
+    	placeMesh3[i].loadToGPU();
+    	*/
         /*
-        var p = setTimeout(placeMesh[i].generate(),1);
-        var l= placeMesh[i];
+    	var p = setTimeout(placeMesh[i].generate(),1);
+    	var l= placeMesh[i];
         var q = setInterval(function()
-        {
-            if(l.ready)
-            {
-                l.loadToGPU();
+    	{
+        	if(l.ready)
+        	{
+            	l.loadToGPU();
                 clearInterval(q);
-            }
-        }, 1);
+        	}
+    	}, 1);
         */
     }
     var xhttp = new XMLHttpRequest();
