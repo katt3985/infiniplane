@@ -66,7 +66,7 @@
         modelMat=mult(modelMat, rotate(this.orentation[2], vec3(0.0, 0.0, 1.0)));
 
         if(arguments.length >= 1)
-            modelMat=mult(modelMat, viewM);
+            modelMat=mult(viewM,modelMat);
         //association time!
         var modelMatGPtr=gl.getUniformLocation(program, "vModelMat");
         //Sends the rotation matrix to the GPU
@@ -84,13 +84,14 @@
         
            
  
-    /*    
-    this.gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuff);
+    if(this.useNormals)
+    {
+        this.gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuff);
         //associates vNormal atribute with the current buffer
         var vNormalGPtr =this.gl.getAttribLocation(program, "vNormal");
         this.gl.vertexAttribPointer(vNormalGPtr, 3,this.gl.FLOAT, false, 0, 0);
         this.gl.enableVertexAttribArray(vNormalGPtr);
-    */
+    }
     
     this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.elemBuff);
     //contex: MeshElemGBufferr
@@ -127,7 +128,7 @@
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuff);
             this.gl.bufferData(this.gl.ARRAY_BUFFER, flatten( this.vertices  ), this.gl.STATIC_DRAW );
         //loads normals into a buffer
-        if(this.normals.length > 0)
+        if(this.normals.length == this.vertices.length)
         {
             this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.normalBuff);
             this.gl.bufferData(this.gl.ARRAY_BUFFER, flatten( this.normals  ),this.gl.STATIC_DRAW );

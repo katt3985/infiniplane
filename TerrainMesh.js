@@ -44,17 +44,18 @@ function clamp(v,max,min)
  var SizeY;
     
    
-    var perlinNoiseFlatTerrainMesh = function(glPlease,or,sc,of,X,Y)
+    var perlinNoiseTerrainMesh = function(glPlease,or,sc,of,X,Y)
     {
         Mesh.apply(this,arguments);
+        this.ready=false;
         this.sizeX =X;
         this.sizeY =Y;
         SizeX=X;
         SizeY=Y;
     }
-    perlinNoiseFlatTerrainMesh.prototype = new Mesh();
+    perlinNoiseTerrainMesh.prototype = new Mesh();
     
-    perlinNoiseFlatTerrainMesh.prototype.generate = function()
+    perlinNoiseTerrainMesh.prototype.generate = function()
     {
     	for(var i = 0; i < this.sizeX; i++)
 		{
@@ -79,7 +80,7 @@ function clamp(v,max,min)
                 }
             }
         }
-
+        this.ready=true;
     }
     
 

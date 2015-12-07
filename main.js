@@ -5,7 +5,7 @@ var pointBuff;
 var normBuff;
 var move;
 var aspect;
-var placeMesh;
+var placeMesh = {};
 var currentlyPressedKeys = {};
 var loc=vec3(0,20,0);
 var rot=vec3(0,0,0);
@@ -37,11 +37,26 @@ window.onload = function init ()
     
     PlayerMesh = new PlyMesh(gl, vec3(0, 90, 0), vec3(0.1,0.1,0.1), vec3(0.0, -2.0, 10.0));
     PlayerMesh.useLines=false;
-    placeMesh = new perlinNoiseFlatTerrainMesh(gl, vec3(0,0,0), vec3(1,1,1), vec3(0,-1,0), 128, 128);
-    placeMesh.SolidColor=vec4(0.0, 1.0, 0.0 ,1.0);
-    placeMesh.LineColor=vec4(0.0,0.0,0.0,1.0);
-    placeMesh.generate();
-    placeMesh.loadToGPU();
+    for(var i=0;i<4;i++)
+    {
+        placeMesh[i] = new perlinNoiseTerrainMesh(gl, vec3(0,0,0), vec3(1,1,1), vec3(0,-1,i*128), 128, 128);
+        placeMesh[i].SolidColor=vec4(0.0, 1.0, 0.0 ,1.0);
+        placeMesh[i].LineColor=vec4(0.0,0.0,0.0,1.0);
+        placeMesh[i].generate();
+        placeMesh[i].loadToGPU();
+        /*
+        var p = setTimeout(placeMesh[i].generate(),1);
+        var l= placeMesh[i];
+        var q = setInterval(function()
+        {
+            if(l.ready)
+            {
+                l.loadToGPU();
+                clearInterval(q);
+            }
+        }, 1);
+        */
+    }
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() 
     {
@@ -201,7 +216,9 @@ function render()
         
         if (PlayerMesh.isLoaded)
             PlayerMesh.render(playerView);
-        placeMesh.render(viewMat);
+        for (i in placeMesh)
+            if(placeMesh[i].isLoaded)
+                placeMesh[i].render(viewMat);
         
 }
 function degToRad(d)
