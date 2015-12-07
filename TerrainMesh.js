@@ -85,9 +85,9 @@ function clamp(v,max,min)
 
 function doStuff(sizeX, sizeZ)
 {
-	var octaves = parseFloat(document.getElementById("octaves").value);
-    var lacunarity = parseFloat(document.getElementById("lacunarity").value);
-    var gain = parseFloat(document.getElementById("gain").value);
+	var octaves = 8.0; //parseFloat(document.getElementById("octaves").value);
+    var lacunarity = 2.0; //parseFloat(document.getElementById("lacunarity").value);
+    var gain = 0.5; //parseFloat(document.getElementById("gain").value);
     for(var j=0; j< sizeX;j++)
     {
         pointList[j] = []
@@ -224,7 +224,7 @@ function smooth(sizeX, sizeZ)
 			 	newPointList[x][z] = avgHeight;
 			}
 			else
-				newPointList[x][z] = pointList[x][z];
+				newPointList[x][z] = pointList[x][z] / 2.0;
 		}
 	}
 	for(var x = 0; x < sizeX; x++)

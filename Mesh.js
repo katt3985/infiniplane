@@ -84,12 +84,13 @@
         
            
  
-        
+    /*    
     this.gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuff);
         //associates vNormal atribute with the current buffer
         var vNormalGPtr =this.gl.getAttribLocation(program, "vNormal");
         this.gl.vertexAttribPointer(vNormalGPtr, 3,this.gl.FLOAT, false, 0, 0);
         this.gl.enableVertexAttribArray(vNormalGPtr);
+    */
     
     this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, this.elemBuff);
     //contex: MeshElemGBufferr

@@ -9,7 +9,7 @@
             //Vertex position sent from the client program
             // c == 'client' or 'cpu' program
             attribute vec3 vPosition;
-            attribute vec3 vNormal;
+            //attribute vec3 vNormal;
             uniform int xkcd;
             attribute vec2 test;
             //uniform float hExp;
@@ -83,11 +83,12 @@
     <canvas id="gl-canvas" width="1280" height="720" style="">
             <pre>No Support... :(</pre>
     </canvas>
+    <!--
 	<input type="text" style="z-index:101; position:absolute; top:10px; left:10px;"/>
 	<input type="text" id = "octaves" value = "8.0" style="z-index:101; position:absolute; top:10px; left:10px;"/>
 	<input type="text" id = "lacunarity" value = "2.0" style="z-index:101; position:absolute; top:40px; left:10px;"/>
 	<input type="text" id = "gain" value = "0.5" style="z-index:101; position:absolute; top:70px; left:10px;"/>
-	<input type="submit" id = "submit" value = "SUBMIT" onclick = "placeMesh.generate()" onclick = "placeMesh.loadToGPU()" style="z-index:101; position:absolute; top:100px; left:10px;"/>
-	
+	<input type="submit" id = "submit" value = "SUBMIT" onclick="generate()" style="z-index:101; position:absolute; top:100px; left:10px;"/>
+	-->
     </body>
 </html>
