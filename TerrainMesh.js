@@ -82,8 +82,15 @@ function clamp(v,max,min)
         }
         this.ready=true;
     }
-    
-
+/*    
+var newValfbm1 = [];
+var newValfbm2 = [];
+var newValfbm3 = [];
+var newValfmbfinal = [];
+var newValperlin = [];
+var newValsmooth = [];
+var newValsmooth2 = [];
+*/
 function doStuff(sizeX, sizeZ)
 {
 	var octaves = 8.0; //parseFloat(document.getElementById("octaves").value);
@@ -91,31 +98,107 @@ function doStuff(sizeX, sizeZ)
     var gain = 0.5; //parseFloat(document.getElementById("gain").value);
     for(var j=0; j< sizeX;j++)
     {
-        pointList[j] = []
+        pointList[j] = [];
+    /*
+        newValfbm1[j] = [];
+        newValfbm2[j] = [];
+        newValfbm3[j] = [];
+        newValfmbfinal[j] = [];
+    */
         for(var i=0; i<sizeZ;i++)
         {
             var p = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
+            /*
+    				newValfbm1[j][i] = p;
+   					newValfbm1[j][i] /= 2.0;
+    				newValfbm1[j][i] *= 255;
+    				newValfbm1[j][i] = parseInt(newValfbm1[j][i]);
+    			*/
             var q = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
+            /*
+            		newValfbm2[j][i] = q;
+   					newValfbm2[j][i] /= 2.0;
+    				newValfbm2[j][i] *= 255;
+    				newValfbm2[j][i] = parseInt(newValfbm2[j][i]);
+    			*/
             var r = fBM(parseFloat(j), parseFloat(i), octaves, lacunarity, gain);
+            /*
+           			newValfbm3[j][i] = r;
+   					newValfbm3[j][i] /= 2.0;
+    				newValfbm3[j][i] *= 255;
+    				newValfbm3[j][i] = parseInt(newValfbm3[j][i]);
+    			*/
             var s = (p + q + r);
+            /*
+            		newValfmbfinal[j][i] = s;
+   					newValfmbfinal[j][i] /= 2.0;
+    				newValfmbfinal[j][i] *= 255;
+    				newValfmbfinal[j][i] = parseInt(newValfmbfinal[j][i]);
+    			*/
             pointList[j][i] = s;
         }
     }
     smooth(sizeX, sizeZ);
-    for(var j = 0; j < sizeX; j++)
-    {
-    	for(var i = 0; i < sizeZ; i++)
-    	{
-    		var newVal = newPointList[j][i] + 2.0;
-   			newVal /= 2.0;
-    		newVal *= 255;
-    		newVal = parseInt(newVal);
-    		//document.write(newVal + " " + newVal + " " + newVal + " ");
-    	}
-    }
+    //printValue(sizeX, sizeZ);
 }
-
-
+/*
+function printValue(sizeX, sizeZ)
+{
+	document.write("<br><br><br><br><br><br><br><br> FBMMMMM1111111 <br><br><br><br><br><br><br><br><br>");
+	for(var j = 0; j < sizeX; j++)
+	{
+		for(var i = 0; i < sizeZ; i++)
+		{
+    		document.write(newValfbm1[j][i] + " " + newValfbm1[j][i] + " " + newValfbm1[j][i] + " ");
+		}
+	}
+	document.write("<br><br><br><br><br><br><br> FBMMMMM222222222 <br><br><br><br><br><br><br><br><br>");
+	for(var j = 0; j < sizeX; j++)
+	{
+		for(var i = 0; i < sizeZ; i++)
+		{
+    		document.write(newValfbm2[j][i] + " " + newValfbm2[j][i] + " " + newValfbm2[j][i] + " ");
+		}
+	}
+	document.write("<br><br><br><br><br><br><br><br><br><br> FBM23333333333 <br><br><br><br><br><br><br><br><br>");
+	for(var j = 0; j < sizeX; j++)
+	{
+		for(var i = 0; i < sizeZ; i++)
+		{
+    		document.write(newValfbm3[j][i] + " " + newValfbm3[j][i] + " " + newValfbm3[j][i] + " ");
+		}
+	}
+	document.write("<br><br><br><br><br><br><br><br><br> finalFBM <br><br><br><br><br><br><br><br><br><br>");
+	for(var j = 0; j < sizeX; j++)
+	{
+		for(var i = 0; i < sizeZ; i++)
+		{
+    		document.write(newValfmbfinal[j][i] + " " + newValfmbfinal[j][i] + " " + newValfmbfinal[j][i] + " ");
+		}
+	}
+	document.write("<br><br><br><br><br><br><br><br> PERLINNNNNNNNNN <br><br><br><br><br><br><br><br><br><br>");
+		for(var i = 0; i < sizeZ; i++)
+		{
+    		document.write(newValperlin[i] + " " + newValperlin[i] + " " + newValperlin[i] + " ");
+		}
+	document.write("<br><br><br><br><br><br><br><br><br><br><br> SMOOOOOOOOOTH1111111111111 \<br><br><br><br><br><br><br><br><br><br>");
+	for(var j = 0; j < sizeX; j++)
+	{
+		for(var i = 0; i < sizeZ; i++)
+		{
+    		document.write(newValsmooth[j][i] + " " + newValsmooth[j][i] + " " + newValsmooth[j][i] + " ");
+		}
+	}
+	document.write("<br><br><br><br><br><br><br><br><br><br><br> SMOOOOOOOOOTH2222222 <br><br><br><br><br><br><br><br><br><br><br>");
+	for(var j = 0; j < sizeX; j++)
+	{
+		for(var i = 0; i < sizeZ; i++)
+		{
+    		document.write(newValsmooth2[j][i] + " " + newValsmooth2[j][i] + " " + newValsmooth2[j][i] + " ");
+		}
+	}
+}
+*/
 
 // Function to linearly interpolate between a and b
  // Weight w should be in the range [0.0, 1.0]
@@ -148,6 +231,7 @@ function dotGridGradient(ix,  iy,  x,  y)
 	return parseFloat(normalize(dx * Gradient[clamp(iy,SizeY-1.0,0)][clamp(ix,SizeX-1.0,0)][0] + dy * Gradient[clamp(iy,SizeY-1.0,0)][clamp(ix,SizeX-1.0,0)][1]));
 }
 
+var asdf = 0;
 // Compute Perlin noise at coordinates x, y
 function perlin(x,  y)
 {
@@ -188,7 +272,15 @@ function perlin(x,  y)
 	n0 = parseFloat(dotGridGradient(x0, y1, x, y));
 	n1 = parseFloat(dotGridGradient(x1, y1, x, y));
 	ix1 = parseFloat(interpolate(n0, n1, sx));
-	value = parseFloat(interpolate(ix0, ix1, sy)); 
+	value = parseFloat(interpolate(ix0, ix1, sy));
+	
+/*
+    		newValperlin[asdf] = value;
+   			newValperlin[asdf] /= 2.0;
+    		newValperlin[asdf] *= 255;
+    		newValperlin[asdf] = parseInt(newValperlin[asdf]);
+			asdf++;
+	*/
 	
 	return parseFloat(value);
 }
@@ -215,6 +307,7 @@ function smooth(sizeX, sizeZ)
 	for(var x = 0; x < sizeX; x++)
 	{
 		newPointList[x] = [];
+		//newValsmooth[x] = [];
 		for(var z = 0; z < sizeZ; z++)
 		{
 			if(x > 0 && z > 0 && x < sizeX - 1 && z < sizeZ - 1)
@@ -226,10 +319,19 @@ function smooth(sizeX, sizeZ)
 			}
 			else
 				newPointList[x][z] = pointList[x][z] / 2.0;
+				
+		/*		
+			newValsmooth[x][z] = pointList[x][z];
+   			newValsmooth[x][z] /= 2.0;
+    		newValsmooth[x][z] *= 255;
+    		newValsmooth[x][z] = parseInt(newValsmooth[x][z]);
+		*/		
+				
 		}
 	}
 	for(var x = 0; x < sizeX; x++)
 	{
+		//newValsmooth2[x] = [];
 		for(var z = 0; z < sizeZ; z++)
 		{
 			if(x > 0 && z > 0 && x < sizeX - 1 && z < sizeZ - 1)
@@ -241,6 +343,13 @@ function smooth(sizeX, sizeZ)
 			}
 			else
 				newPointList[x][z] = newPointList[x][z] / 2.0;
+				
+		/*		
+			newValsmooth2[x][z] = newPointList[x][z];
+   			newValsmooth2[x][z] /= 2.0;
+    		newValsmooth2[x][z] *= 255;
+    		newValsmooth2[x][z] = parseInt(newValsmooth2[x][z]);
+    	*/
 		}
 	}
 }
