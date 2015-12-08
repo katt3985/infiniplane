@@ -84,7 +84,7 @@
         
            
  
-    if(this.useNormals)
+    if(0)//(this.useNormals) //out of time
     {
         this.gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuff);
         //associates vNormal atribute with the current buffer
